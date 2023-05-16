@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<HnTheme>
+	<item style="slide"/>
+	<item package="com.hihonor.android.thememanager"/>
+	<item dynamicPath="lockscreen"/>
+	<item minversion="3.0.0"/>
+	<item maxHeight="2160"/>
+</HnTheme>
