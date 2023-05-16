@@ -146,16 +146,19 @@ class App(QWidget):
             new_folder = os.path.join(icons_folder, "dynamic_icons/com.hihonor.android.totemweather")
             os.rename(old_folder, new_folder)
 
-            # rename folder within icons folder /dynamic_icons/com.android.deskclock to /dynamic_icons/com.hihonor.deskclock
+            # rename folder within icons folder com.android.deskclock OR com.huawei.deskclock to /dynamic_icons/com.hihonor.deskclock
             old_folder = os.path.join(icons_folder, "dynamic_icons/com.android.deskclock")
             new_folder = os.path.join(icons_folder, "dynamic_icons/com.hihonor.deskclock")
-            os.rename(old_folder, new_folder)
+            if os.path.exists(old_folder):
+                os.rename(old_folder, new_folder)
+                result_text += f"Renamed:\n- {old_folder} -> {new_folder}\n"
+            else:
+                old_folder = os.path.join(icons_folder, "dynamic_icons/com.huawei.deskclock")
+                os.rename(old_folder, new_folder)
 
+                       
 
             result_text += f"Renamed:\n- {old_folder} -> {new_folder}\n"
-
-            assert os.path.exists(os.path.join(icons_folder, "dynamic_icons/com.hihonor.android.totemweather")) == True
-            assert os.path.exists(os.path.join(icons_folder, "dynamic_icons/com.hihonor.deskclock")) == True
                             
             # Zip icon files and all folders within the icon_folder into "icons" file
             shutil.make_archive(os.path.join(self.work_folder, icon_file_name), archive_format, icons_folder)
@@ -187,7 +190,7 @@ class App(QWidget):
 
             # Read the description.xml file
             description_file_path = os.path.join(self.work_folder, "description.xml")
-            with open(description_file_path, "r") as file:
+            with open(description_file_path, "r", encoding='utf-8') as file:
                 xml_text = file.read()
 
             result_text += f"Read '{description_file_path}'\n"
@@ -279,8 +282,8 @@ class App(QWidget):
         assert root.find(".//briefInfo").text == self.brief_info_edit.toPlainText()
 
         # Write the updated description.xml file
-        with open(self.source_description_file_path, "w") as file:
-            file.write(ET.tostring(root, encoding="unicode"))
+        with open(self.source_description_file_path, "w", encoding='utf-8') as file:
+            file.write(ET.tostring(root, encoding="utf-8").decode('utf-8'))
 
         self.text_edit.setText("Saved")
         assert self.text_edit.toPlainText() == "Saved"
