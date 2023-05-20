@@ -1,21 +1,11 @@
-
-# unzip a .hwt file into a workfolder
-# rename the file com.huawei.android.launcher to com.hihonor.android.launcher
-# rename the file com.huawei.phone.recorder to com.hihonor.phone.recorder
-# resize the icon_small.png from 510x340px to 510x345px
-# unzip the icons file into a workfolder
-# rename all icon filenames: replace huawei with hihonor
-# zip again all icon files into a "icon" file
-# delete the icon workspace
-# reformat the description.xml and display the result in a GUI, where the user can edit the fields
-# save the description.xml
-# zip all files in the workfolder and name the file .hnt 
-
 import os
 import shutil
 import zipfile
 from PIL import Image
 from PyQt5.QtWidgets import QApplication, QWidget, QTextEdit, QVBoxLayout, QPushButton, QFileDialog,QLabel, QLineEdit
+from uploadActions import unzip_hwt, rename_files, unzip_icons, rename_icons, zip_icons, delete_icons_file, remove_icons_zip_extension, delete_icons_workspace
+from imageManipulation import resize_icon_small_preview
+from xmlmanipluation import read_description_xml, delete_and_copy_theme_xml
 
 class App(QWidget):
     def __init__(self):
@@ -59,6 +49,9 @@ class App(QWidget):
         self.work_folder = "workfolder"
         self.source_description_file_path = os.path.join(self.work_folder, "source_description.xml")
         self.xml_text = None
+        self.icon_file_name = "icons"
+        self.icons_folder = "icon_workfolder"
+        self.archive_format = "zip"
 
     def cleanup_work_folder(self):
         work_folder = "workfolder"
@@ -77,118 +70,46 @@ class App(QWidget):
         file_dialog = QFileDialog()
         file_path, _ = file_dialog.getOpenFileName(self, "Select .hwt file", "", "HWT Files (*.hwt)")
         if file_path:
-            # Unzip .hwt file into work folder           
-            os.makedirs(self.work_folder, exist_ok=True)
-            with zipfile.ZipFile(file_path, "r") as zip_ref:
-                  zip_ref.extractall(self.work_folder)
+
+            # Call the unzip_hwt function from uploadActions.py
+            unzip_hwt(file_path, self.work_folder)
+            result_text = "Unzipped .hwt file successfully\n"
             
-            result_text = f"File unzipped into '{self.work_folder}'\n"
+            # Call the rename_files function from uploadActions.py
+            rename_files(self.work_folder)
+            result_text += "Renamed systen files successfully\n"
 
-            assert os.path.exists(self.work_folder) == True
-
-
-            # Rename files
-            old_launcher_path = os.path.join(self.work_folder, "com.huawei.android.launcher")
-            new_launcher_path = os.path.join(self.work_folder, "com.hihonor.android.launcher")
-            os.rename(old_launcher_path, new_launcher_path)
-
-            old_recorder_path = os.path.join(self.work_folder, "com.huawei.phone.recorder")
-            new_recorder_path = os.path.join(self.work_folder, "com.hihonor.phone.recorder")
-            os.rename(old_recorder_path, new_recorder_path)
-
-            result_text += f"Renamed:\n- {old_launcher_path} -> {new_launcher_path}\n"
-            result_text += f"- {old_recorder_path} -> {new_recorder_path}\n"
-
-            assert os.path.exists(new_launcher_path) == True
-            assert os.path.exists(new_recorder_path) == True
-            
             # Resize icon_small.jpg within the preview folder
-            preview_folder = os.path.join(self.work_folder, "preview")
-            icon_small_path = os.path.join(preview_folder, "icon_small.jpg")
-
-            assert os.path.exists(icon_small_path) == True
-
-            # Perform the image resizing using a library of your choice (e.g., PIL, OpenCV)     
-            image = Image.open(icon_small_path)
-            resized_image = image.resize((510, 345))
-            resized_image.save(icon_small_path)
-
+            resize_icon_small_preview(self.work_folder)
             result_text += f"Overwrote icon_small.jpg with resized image (510x345px)\n" 
-
-            assert os.path.exists(icon_small_path) == True                    
-
+                     
             # Unzip icons file within the workfolder with shutil
-            icon_file_name = "icons"
-            icons_folder = "icon_workfolder"
-            archive_format = "zip"
-            
-            shutil.unpack_archive(os.path.join(self.work_folder, icon_file_name), icons_folder, archive_format)
-
-            result_text += f"Unzipped icons file into '{icons_folder}'\n"
-
-            assert os.path.exists(icons_folder) == True
+            unzip_icons(self.work_folder,self.icon_file_name,self.icons_folder, self.archive_format)
+            result_text += f"Unzipped '{self.icon_file_name}' file successfully\n"
 
             # Rename icon files
-            for filename in os.listdir(icons_folder):
-                if filename.startswith("com.huawei"):
-                    old_filename = os.path.join(icons_folder, filename)
-                    new_filename = os.path.join(icons_folder, filename.replace("com.huawei", "com.hihonor"))
-                    os.rename(old_filename, new_filename)
-
-                    result_text += f"Renamed:\n- {old_filename} -> {new_filename}\n"
-
-                    assert os.path.exists(new_filename) == True
-
-
-
-            # rename folder within icons folder /dynamic_icons/com.huawei.android.totemweather to /dynamic_icons/com.hihonor.android.totemweather
-            old_folder = os.path.join(icons_folder, "dynamic_icons/com.huawei.android.totemweather")
-            new_folder = os.path.join(icons_folder, "dynamic_icons/com.hihonor.android.totemweather")
-            os.rename(old_folder, new_folder)
-
-            # rename folder within icons folder com.android.deskclock OR com.huawei.deskclock to /dynamic_icons/com.hihonor.deskclock
-            old_folder = os.path.join(icons_folder, "dynamic_icons/com.android.deskclock")
-            new_folder = os.path.join(icons_folder, "dynamic_icons/com.hihonor.deskclock")
-            if os.path.exists(old_folder):
-                os.rename(old_folder, new_folder)
-                result_text += f"Renamed:\n- {old_folder} -> {new_folder}\n"
-            else:
-                old_folder = os.path.join(icons_folder, "dynamic_icons/com.huawei.deskclock")
-                os.rename(old_folder, new_folder)
-
-                       
-
-            result_text += f"Renamed:\n- {old_folder} -> {new_folder}\n"
-                            
+            rename_icons(self.work_folder,self.icons_folder)
+            result_text += f"Renamed icon files successfully\n"
+            
             # Zip icon files and all folders within the icon_folder into "icons" file
-            shutil.make_archive(os.path.join(self.work_folder, icon_file_name), archive_format, icons_folder)
+            zip_icons(self.work_folder,self.icon_file_name,self.icons_folder, self.archive_format)
+            result_text += f"Zipped icon files and all folders within the icon_folder into '{self.icon_file_name}' file successfully\n"
 
-            result_text += f"Zipped '{icons_folder}' into '{icon_file_name}.{archive_format}'\n"
-
-            assert os.path.exists(os.path.join(self.work_folder, icon_file_name + "." + archive_format)) == True
+            # Delete the icons workfolder from workspace
+            delete_icons_file(self.work_folder,self.icon_file_name)
+            result_text += f"Deleted '{self.icon_file_name}' file successfully\n"
             
-            # delete original icon file
-            os.remove(os.path.join(self.work_folder, icon_file_name))
 
-            result_text += f"Deleted '{icon_file_name}'\n"
-
-            assert os.path.exists(os.path.join(self.work_folder, icon_file_name)) == False
-            
             #remove .zip extension from the file
-            os.rename(os.path.join(self.work_folder, icon_file_name + "." + archive_format), os.path.join(self.work_folder, icon_file_name))
-
-            result_text += f"Removed .zip extension from '{icon_file_name}.{archive_format}'\n"
-
-            assert os.path.exists(os.path.join(self.work_folder, icon_file_name + "." + archive_format)) == False         
+            remove_icons_zip_extension(self.work_folder,self.icon_file_name,self.archive_format)
+            result_text += f"Removed .zip extension from the file successfully\n"
 
             # Delete icon workspace
-            shutil.rmtree(icons_folder)
+            delete_icons_workspace(self.icons_folder)
+            result_text += f"Deleted icon workspace successfully\n"
 
-            result_text += f"Deleted '{icons_folder}'\n"
-
-            assert os.path.exists(icons_folder) == False
-
-            # Read the description.xml file
+            
+             # Read the description.xml file
             description_file_path = os.path.join(self.work_folder, "description.xml")
             with open(description_file_path, "r", encoding='utf-8') as file:
                 xml_text = file.read()
@@ -265,6 +186,12 @@ class App(QWidget):
 
             result_text += f"Copied 'source_theme.xml' into '{os.path.join(self.work_folder, 'unlock/theme.xml')}'\n"
             assert os.path.exists(os.path.join(self.work_folder, "unlock/theme.xml")) == True
+
+            
+            
+           
+
+            
             
 
     def save(self):
