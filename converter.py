@@ -5,8 +5,8 @@ from PIL import Image
 from PyQt5.QtWidgets import QApplication, QWidget, QTextEdit, QVBoxLayout, QPushButton, QFileDialog,QLabel, QLineEdit
 from functions.uploadActions import unzip_hwt, rename_files, unzip_icons, rename_icons, zip_icons, delete_icons_file, remove_icons_zip_extension, delete_icons_workspace
 from functions.imageManipulation import resize_icon_small_preview
-from functions.xmlmanipluation import delete_and_copy_theme_xml
-from functions.helperFunctions import cleanup_work_folder
+from functions.xmlmanipluation import delete_and_copy_theme_xml, unzip_contacts, unzip_incallui, unzip_mms, unzip_phone, unzip_systemui, unzip_recorder, unzip_telecom, unzip_launcher
+from functions.helperFunctions import delete_work_folders
 from functions.saveActions import delete_description_xml, rename_description_xml, zip_workfolder
 
 class App(QWidget):
@@ -44,8 +44,7 @@ class App(QWidget):
         layout.addWidget(self.save_button)
         self.setLayout(layout)
 
-        # Clean up work folder at the start of each app launch
-        cleanup_work_folder(self)
+     
 
         # Declare variables for save function
         self.work_folder = "workfolder"
@@ -54,6 +53,21 @@ class App(QWidget):
         self.icon_file_name = "icons"
         self.icons_folder = "icon_workfolder"
         self.archive_format = "zip"  
+        self.contacts_folder = "com.android.contacts"
+        self.incallui_folder = "com.android.incallui"
+        self.mms_folder = "com.android.mms"
+        self.phone_folder = "com.android.phone"
+        self.systemui_folder = "com.android.systemui"
+        self.recorder_folder = "com.hihonor.phone.recorder"
+        self.telecom_folder = "com.android.server.telecom"
+        self.launcher_folder = "com.hihonor.android.launcher"
+
+
+
+        
+       # Clean up work folder at the start of each app launch
+        delete_work_folders(self.contacts_folder, self.icons_folder, self.work_folder, self.launcher_folder, self.telecom_folder, self.recorder_folder, self.systemui_folder, self.phone_folder, self.mms_folder, self.incallui_folder)
+        assert os.path.exists(self.contacts_folder) == False, "Delete workfolder failed"
              
 
     def upload_hwt(self):
@@ -97,7 +111,8 @@ class App(QWidget):
             # Delete icon workspace
             delete_icons_workspace(self.icons_folder)
             result_text += f"Deleted icon workspace successfully\n"
-
+            
+            ############################# Description.xml management and GUI ##########################################
             # Read the description.xml file
             description_file_path = os.path.join(self.work_folder, "description.xml")
             with open(description_file_path, "r", encoding='utf-8') as file:
@@ -162,8 +177,43 @@ class App(QWidget):
             #delete theme.xml file within the workfolder/unlock/ folder and copy source_theme.xml file into the workfolder/unlock/ folder
             delete_and_copy_theme_xml(self.work_folder)
             result_text += f"Deleted theme.xml file within the workfolder/unlock/ folder and copied source_theme.xml file into the workfolder/unlock/ folder successfully\n"
+            ##############################################################################################################
 
-    
+            ############################# Unzip files within the workfolder ##########################################
+            #unzip com.android.contacts file within the workfolder with shutil
+            unzip_contacts(self.work_folder,self.contacts_folder, self.archive_format)
+            result_text += f"Unzipped '{self.contacts_folder}' file successfully\n"
+
+            #unzip com.android.incallui file within the workfolder with shutil
+            unzip_incallui(self.work_folder,self.incallui_folder, self.archive_format)
+            result_text += f"Unzipped '{self.incallui_folder}' file successfully\n"
+
+            #unzip com.android.mms file within the workfolder with shutil
+            unzip_mms(self.work_folder,self.mms_folder, self.archive_format)
+            result_text += f"Unzipped '{self.mms_folder}' file successfully\n"
+
+            #unzip com.android.phone file within the workfolder with shutil
+            unzip_phone(self.work_folder,self.phone_folder, self.archive_format)
+            result_text += f"Unzipped '{self.phone_folder}' file successfully\n"
+
+            #unzip com.android.systemui file within the workfolder with shutil
+            unzip_systemui(self.work_folder,self.systemui_folder, self.archive_format)
+            result_text += f"Unzipped '{self.systemui_folder}' file successfully\n"
+
+            #unzip com.android.phone.recorder file within the workfolder with shutil
+            unzip_recorder(self.work_folder,self.recorder_folder, self.archive_format)
+            result_text += f"Unzipped '{self.recorder_folder}' file successfully\n"
+
+            #unzip com.android.server.telecom file within the workfolder with shutil
+            unzip_telecom(self.work_folder,self.telecom_folder, self.archive_format)
+            result_text += f"Unzipped '{self.telecom_folder}' file successfully\n"
+
+            #unzip com.hihonor.android.launcher file within the workfolder with shutil
+            unzip_launcher(self.work_folder,self.launcher_folder, self.archive_format)
+            result_text += f"Unzipped '{self.launcher_folder}' file successfully\n"
+            ##############################################################################################################
+
+
 
     def save(self):
         # Update the description.xml file with the new values
@@ -195,8 +245,8 @@ class App(QWidget):
 
         zip_workfolder(self.work_folder, self.title_edit, self.designer_edit, self.version_edit, self.text_edit)
                 
-        # Delete the workfolder
-        cleanup_work_folder(self)
+        delete_work_folders(self.contacts_folder, self.icons_folder, self.work_folder, self.launcher_folder, self.telecom_folder, self.recorder_folder, self.systemui_folder, self.phone_folder, self.mms_folder, self.incallui_folder)
+        assert os.path.exists(self.contacts_folder) == False, "Delete workfolder failed"
     
 
 if __name__ == "__main__":

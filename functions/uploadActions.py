@@ -83,3 +83,8 @@ def remove_icons_zip_extension(work_folder,icon_file_name,archive_format):
 def delete_icons_workspace(icons_folder):
     shutil.rmtree(icons_folder)
     assert os.path.exists(icons_folder) == False, "Delete failed"
+
+# Unzip com.android.contacts file within the workfolder with shutil
+def unzip_contacts(work_folder,icon_file_name,contacts_folder,archive_format):    
+    shutil.unpack_archive(os.path.join(work_folder, icon_file_name), contacts_folder, archive_format)
+    assert os.path.exists(contacts_folder) == True, "Unzip icons failed"
