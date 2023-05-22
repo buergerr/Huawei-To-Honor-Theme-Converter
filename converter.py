@@ -3,11 +3,11 @@ import shutil
 import zipfile
 from PIL import Image
 from PyQt5.QtWidgets import QApplication, QWidget, QTextEdit, QVBoxLayout, QPushButton, QFileDialog,QLabel, QLineEdit
-from uploadActions import unzip_hwt, rename_files, unzip_icons, rename_icons, zip_icons, delete_icons_file, remove_icons_zip_extension, delete_icons_workspace
-from imageManipulation import resize_icon_small_preview
-from xmlmanipluation import delete_and_copy_theme_xml
-from helperFunctions import cleanup_work_folder
-from saveActions import delete_description_xml, rename_description_xml, zip_workfolder
+from functions.uploadActions import unzip_hwt, rename_files, unzip_icons, rename_icons, zip_icons, delete_icons_file, remove_icons_zip_extension, delete_icons_workspace
+from functions.imageManipulation import resize_icon_small_preview
+from functions.xmlmanipluation import delete_and_copy_theme_xml
+from functions.helperFunctions import cleanup_work_folder
+from functions.saveActions import delete_description_xml, rename_description_xml, zip_workfolder
 
 class App(QWidget):
     def __init__(self):
@@ -163,9 +163,7 @@ class App(QWidget):
             delete_and_copy_theme_xml(self.work_folder)
             result_text += f"Deleted theme.xml file within the workfolder/unlock/ folder and copied source_theme.xml file into the workfolder/unlock/ folder successfully\n"
 
-
-            
-            
+    
 
     def save(self):
         # Update the description.xml file with the new values
@@ -200,8 +198,6 @@ class App(QWidget):
         # Delete the workfolder
         cleanup_work_folder(self)
     
-       
-
 
 if __name__ == "__main__":
     app = QApplication([])
