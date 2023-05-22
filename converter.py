@@ -5,7 +5,9 @@ from PIL import Image
 from PyQt5.QtWidgets import QApplication, QWidget, QTextEdit, QVBoxLayout, QPushButton, QFileDialog,QLabel, QLineEdit
 from uploadActions import unzip_hwt, rename_files, unzip_icons, rename_icons, zip_icons, delete_icons_file, remove_icons_zip_extension, delete_icons_workspace
 from imageManipulation import resize_icon_small_preview
-from xmlmanipluation import read_description_xml, delete_and_copy_theme_xml
+from xmlmanipluation import delete_and_copy_theme_xml
+from helperFunctions import cleanup_work_folder
+from saveActions import delete_description_xml, rename_description_xml, zip_workfolder
 
 class App(QWidget):
     def __init__(self):
@@ -43,7 +45,7 @@ class App(QWidget):
         self.setLayout(layout)
 
         # Clean up work folder at the start of each app launch
-        self.cleanup_work_folder()
+        cleanup_work_folder(self)
 
         # Declare variables for save function
         self.work_folder = "workfolder"
@@ -51,20 +53,8 @@ class App(QWidget):
         self.xml_text = None
         self.icon_file_name = "icons"
         self.icons_folder = "icon_workfolder"
-        self.archive_format = "zip"
-
-    def cleanup_work_folder(self):
-        work_folder = "workfolder"
-        if os.path.exists(work_folder):
-            shutil.rmtree(work_folder)
-        if os.path.exists("icon_workfolder"):
-            shutil.rmtree("icon_workfolder")
-
-        assert os.path.exists(work_folder) == False
-        assert os.path.exists("icon_workfolder") == False
-                   
-
-        
+        self.archive_format = "zip"  
+             
 
     def upload_hwt(self):
         file_dialog = QFileDialog()
@@ -108,30 +98,26 @@ class App(QWidget):
             delete_icons_workspace(self.icons_folder)
             result_text += f"Deleted icon workspace successfully\n"
 
-            
-             # Read the description.xml file
+            # Read the description.xml file
             description_file_path = os.path.join(self.work_folder, "description.xml")
             with open(description_file_path, "r", encoding='utf-8') as file:
                 xml_text = file.read()
 
             result_text += f"Read '{description_file_path}'\n"
 
-            assert os.path.exists(description_file_path) == True
+            assert os.path.exists(description_file_path) == True, "Description file not found"
             
             # Extract the desired fields from the original description
             import xml.etree.ElementTree as ET
             root = ET.fromstring(xml_text)
             title = root.find(".//title").text            
             brief_info = root.find(".//briefinfo").text
-
-            assert title != None
-            assert brief_info != None
             
             # Copy the source_description.xml file into the workfolder
             shutil.copyfile("source_description.xml", os.path.join(self.work_folder, "source_description.xml"))
 
             result_text += f"Copied 'source_description.xml' into '{self.work_folder}'\n"
-            assert os.path.exists(os.path.join(self.work_folder, "source_description.xml")) == True
+            assert os.path.exists(os.path.join(self.work_folder, "source_description.xml")) == True, "Source description file not copied"
             
             # Read the source_description.xml file within the workfolder
             self.source_description_file_path = os.path.join(self.work_folder, "source_description.xml")
@@ -139,15 +125,12 @@ class App(QWidget):
                 self.xml_text = file.read()
 
             result_text += f"Read '{self.source_description_file_path}'\n"
-            assert os.path.exists(self.source_description_file_path) == True
+            assert os.path.exists(self.source_description_file_path) == True, "Source description file not found"
             
             # Extract and display the version and designer from the source_description.xml file
             root = ET.fromstring(self.xml_text)
             designer = root.find(".//designer").text
             version = root.find(".//version").text
-
-            assert designer != None
-            assert version != None
                       
             # convert all characters to english
             title = title.encode('ascii', 'ignore').decode('ascii')
@@ -156,10 +139,10 @@ class App(QWidget):
             brief_info = brief_info.encode('ascii', 'ignore').decode('ascii')
 
             result_text += f"Extracted fields from '{description_file_path}'\n"
-            assert title != None
-            assert designer != None
-            assert version != None
-            assert brief_info != None
+            assert title != None, "Title not extracted"
+            assert designer != None, "Designer not extracted"
+            assert version != None, "Version not extracted"
+            assert brief_info != None, "Brief Info not extracted"
 
             # Update the GUI fields with the extracted values
             self.title_edit.setText(title)
@@ -167,29 +150,19 @@ class App(QWidget):
             self.version_edit.setText(version)
             self.brief_info_edit.setText(brief_info)
         
-            assert self.title_edit.text() == title
-            assert self.designer_edit.text() == designer
-            assert self.version_edit.text() == version
-            assert self.brief_info_edit.toPlainText() == brief_info
+            assert self.title_edit.text() == title, "Title not updated"
+            assert self.designer_edit.text() == designer, "Designer not updated"
+            assert self.version_edit.text() == version, "Version not updated"
+            assert self.brief_info_edit.toPlainText() == brief_info, "Brief Info not updated"
                 
             self.text_edit.setText(result_text)
-            assert self.text_edit.toPlainText() == result_text
+            assert self.text_edit.toPlainText() == result_text, "Result text not displayed"
 
-            # delete theme.xml file within the workfolder/unlock/ folder
-            os.remove(os.path.join(self.work_folder, "unlock/theme.xml"))
+          
+            #delete theme.xml file within the workfolder/unlock/ folder and copy source_theme.xml file into the workfolder/unlock/ folder
+            delete_and_copy_theme_xml(self.work_folder)
+            result_text += f"Deleted theme.xml file within the workfolder/unlock/ folder and copied source_theme.xml file into the workfolder/unlock/ folder successfully\n"
 
-            result_text += f"Deleted '{os.path.join(self.work_folder, 'unlock/theme.xml')}'\n"
-            assert os.path.exists(os.path.join(self.work_folder, "unlock/theme.xml")) == False
-
-            # copy source_theme.xml file into the workfolder/unlock/ folder
-            shutil.copyfile("source_theme.xml", os.path.join(self.work_folder, "unlock/theme.xml"))
-
-            result_text += f"Copied 'source_theme.xml' into '{os.path.join(self.work_folder, 'unlock/theme.xml')}'\n"
-            assert os.path.exists(os.path.join(self.work_folder, "unlock/theme.xml")) == True
-
-            
-            
-           
 
             
             
@@ -203,45 +176,31 @@ class App(QWidget):
         root.find(".//version").text = self.version_edit.text()
         root.find(".//briefInfo").text = self.brief_info_edit.toPlainText()  # Use toPlainText() instead of text()
 
-        assert root.find(".//title").text == self.title_edit.text()
-        assert root.find(".//designer").text == self.designer_edit.text()
-        assert root.find(".//version").text == self.version_edit.text()
-        assert root.find(".//briefInfo").text == self.brief_info_edit.toPlainText()
+        assert root.find(".//title").text == self.title_edit.text(), "Title not updated"
+        assert root.find(".//designer").text == self.designer_edit.text(), "Designer not updated"
+        assert root.find(".//version").text == self.version_edit.text(), "Version not updated"
+        assert root.find(".//briefInfo").text == self.brief_info_edit.toPlainText(), "Brief Info not updated"
 
         # Write the updated description.xml file
         with open(self.source_description_file_path, "w", encoding='utf-8') as file:
             file.write(ET.tostring(root, encoding="utf-8").decode('utf-8'))
 
         self.text_edit.setText("Saved")
-        assert self.text_edit.toPlainText() == "Saved"
+        assert self.text_edit.toPlainText() == "Saved", "Saved text not displayed"
 
-        # delete the original description.xml file
-        os.remove(os.path.join(self.work_folder, "description.xml"))
-        assert os.path.exists(os.path.join(self.work_folder, "description.xml")) == False
-        # rename the source_description.xml file to description.xml
-        os.rename(self.source_description_file_path, os.path.join(self.work_folder, "description.xml"))
-        assert os.path.exists(os.path.join(self.work_folder, "description.xml")) == True
+        # Delete the original description.xml file
+        delete_description_xml(self.work_folder)
+
+        # Rename the source_description.xml file to description.xml
+        rename_description_xml(self.work_folder, self.source_description_file_path)
         
-        # Zip the workfolder into a .hwt file
-        title = self.title_edit.text()
-        designer = self.designer_edit.text()
-        version = self.version_edit.text()
-        hnt_filename = f"{title}_{designer}_{version}.hnt"
-        hnt_filepath = os.path.join(os.path.dirname(self.work_folder), hnt_filename)
 
-        with zipfile.ZipFile(hnt_filepath, "w", zipfile.ZIP_DEFLATED) as zip_ref:
-            for root, _, files in os.walk(self.work_folder):
-                for file in files:
-                    file_path = os.path.join(root, file)
-                    zip_ref.write(file_path, os.path.relpath(file_path, self.work_folder))
-
-        self.text_edit.append(f"Zipped workfolder into '{hnt_filename}'")
-        assert os.path.exists(hnt_filepath) == True
-
-
+        zip_workfolder(self.work_folder, self.title_edit, self.designer_edit, self.version_edit, self.text_edit)
+                
         # Delete the workfolder
-        shutil.rmtree(self.work_folder)
-        assert  os.path.exists(self.work_folder) == False
+        cleanup_work_folder(self)
+    
+       
 
 
 if __name__ == "__main__":
