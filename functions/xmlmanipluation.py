@@ -35,22 +35,21 @@ def read_xmlNameConversion(assets_folder, xmlNameConversionFile):
 
     return xmlNameConversion_dict
 
-
 # iterate through the xml and replace the name of the resource with keys_mapping
 def replace_keys_in_xml(file_path, keys_mapping):
     tree = ET.parse(file_path)
     root = tree.getroot()
     for resources_elem in root.iter("resources"):
         for color_elem in resources_elem.iter("color"):
-            for key in keys_mapping:
-                if color_elem.attrib.get("name") == key:
-                    color_elem.attrib["name"] = keys_mapping[key]
+            name_attr = color_elem.attrib.get("name")
+            for old_value, new_value in keys_mapping.items():
+                name_attr = name_attr.replace(old_value, new_value)
+            color_elem.attrib["name"] = name_attr
     tree.write(file_path)
 
 
 
-
-
+# iterate through the xml files within the folders and replace the name of the resource with keys_mapping
 def replace_keys_in_xml_folders(folders, keys_mapping):
     for folder in folders:
         folder_path = os.path.join(os.getcwd(), folder)
@@ -60,5 +59,3 @@ def replace_keys_in_xml_folders(folders, keys_mapping):
                     file_path = os.path.join(root, file)
                     replace_keys_in_xml(file_path, keys_mapping)
                     
-
-

@@ -73,8 +73,7 @@ class App(QWidget):
             "com.android.server.telecom", 
             "com.hihonor.android.launcher"]
         self.keys_mapping = {
-            "emui": "magic", 
-            "emui_fab_bg_normal": "magic_fab_bg_normal"
+            "emui": "magic"    
             }
 
 
