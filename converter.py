@@ -5,7 +5,7 @@ from PIL import Image
 from PyQt5.QtWidgets import QApplication, QWidget, QTextEdit, QVBoxLayout, QPushButton, QFileDialog,QLabel, QLineEdit
 from functions.uploadActions import unzip_hwt, rename_files, unzip_icons, rename_icons, zip_icons, delete_icons_file, remove_icons_zip_extension, delete_icons_workspace
 from functions.imageManipulation import resize_icon_small_preview
-from functions.xmlmanipluation import delete_and_copy_theme_xml, unzip_contacts, unzip_incallui, unzip_mms, unzip_phone, unzip_systemui, unzip_recorder, unzip_telecom, unzip_launcher
+from functions.xmlmanipluation import delete_and_copy_theme_xml, unzip_folder, replace_keys_in_xml_folders
 from functions.helperFunctions import delete_work_folders
 from functions.saveActions import delete_description_xml, rename_description_xml, zip_workfolder
 
@@ -61,6 +61,21 @@ class App(QWidget):
         self.recorder_folder = "com.hihonor.phone.recorder"
         self.telecom_folder = "com.android.server.telecom"
         self.launcher_folder = "com.hihonor.android.launcher"
+        self.assets_folder = "assets/"
+        self.xmlNameConversionFile = "xmlNameConversions.csv"
+        self.folders = [
+            "com.android.contacts", 
+            "com.android.incallui", 
+            "com.android.mms",
+            "com.android.phone", 
+            "com.android.systemui", 
+            "com.hihonor.phone.recorder", 
+            "com.android.server.telecom", 
+            "com.hihonor.android.launcher"]
+        self.keys_mapping = {
+            "emui": "magic", 
+            "emui_fab_bg_normal": "magic_fab_bg_normal"
+            }
 
 
 
@@ -178,42 +193,19 @@ class App(QWidget):
             delete_and_copy_theme_xml(self.work_folder)
             result_text += f"Deleted theme.xml file within the workfolder/unlock/ folder and copied source_theme.xml file into the workfolder/unlock/ folder successfully\n"
             ##############################################################################################################
+            
+            
+            
+            # Unzip files within the workfolder #
+            for folder in self.folders:
+                unzip_folder(self.work_folder, folder, self.archive_format)
+                result_text += f"Unzipped '{folder}' file successfully\n"
+            
 
-            ############################# Unzip files within the workfolder ##########################################
-            #unzip com.android.contacts file within the workfolder with shutil
-            unzip_contacts(self.work_folder,self.contacts_folder, self.archive_format)
-            result_text += f"Unzipped '{self.contacts_folder}' file successfully\n"
-
-            #unzip com.android.incallui file within the workfolder with shutil
-            unzip_incallui(self.work_folder,self.incallui_folder, self.archive_format)
-            result_text += f"Unzipped '{self.incallui_folder}' file successfully\n"
-
-            #unzip com.android.mms file within the workfolder with shutil
-            unzip_mms(self.work_folder,self.mms_folder, self.archive_format)
-            result_text += f"Unzipped '{self.mms_folder}' file successfully\n"
-
-            #unzip com.android.phone file within the workfolder with shutil
-            unzip_phone(self.work_folder,self.phone_folder, self.archive_format)
-            result_text += f"Unzipped '{self.phone_folder}' file successfully\n"
-
-            #unzip com.android.systemui file within the workfolder with shutil
-            unzip_systemui(self.work_folder,self.systemui_folder, self.archive_format)
-            result_text += f"Unzipped '{self.systemui_folder}' file successfully\n"
-
-            #unzip com.android.phone.recorder file within the workfolder with shutil
-            unzip_recorder(self.work_folder,self.recorder_folder, self.archive_format)
-            result_text += f"Unzipped '{self.recorder_folder}' file successfully\n"
-
-            #unzip com.android.server.telecom file within the workfolder with shutil
-            unzip_telecom(self.work_folder,self.telecom_folder, self.archive_format)
-            result_text += f"Unzipped '{self.telecom_folder}' file successfully\n"
-
-            #unzip com.hihonor.android.launcher file within the workfolder with shutil
-            unzip_launcher(self.work_folder,self.launcher_folder, self.archive_format)
-            result_text += f"Unzipped '{self.launcher_folder}' file successfully\n"
-            ##############################################################################################################
-
-
+            # Replace keys in xml files within the workfolder #     
+            replace_keys_in_xml_folders(self.folders, self.keys_mapping)
+            result_text += f"Replaced keys in xml files within the workfolder successfully\n"
+            
 
     def save(self):
         # Update the description.xml file with the new values
