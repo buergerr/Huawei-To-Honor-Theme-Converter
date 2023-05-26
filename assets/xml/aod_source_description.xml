@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<HnTheme>
+        <title></title>
+          <designer>Designer Name</designer>
+        <screen>FHD</screen>
+        <version>6.0.0</version>
+         <briefInfo>Enjoy this AOD. If you like it, share it with your friends</briefInfo>
+        <chargeFlag>0</chargeFlag>       <priceLevel>-1</priceLevel>
+        <expiredDate>-1</expiredDate>
+         <tag>文艺;治愈</tag>
+  <areaFlag>1</areaFlag>     <extra>{"extraContentFlag":"3","category":"文艺清新"}</extra>
+ </HnTheme>

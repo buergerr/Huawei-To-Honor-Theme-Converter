@@ -15,20 +15,11 @@ def unzip_hwt(file_path, work_folder):
    
 
 # Rename files
-def rename_files(work_folder):
-    old_launcher_path = os.path.join(work_folder, "com.huawei.android.launcher")
-    new_launcher_path = os.path.join(work_folder, "com.hihonor.android.launcher")
-    os.rename(old_launcher_path, new_launcher_path)
-
-    old_recorder_path = os.path.join(work_folder, "com.huawei.phone.recorder")
-    new_recorder_path = os.path.join(work_folder, "com.hihonor.phone.recorder")
-    os.rename(old_recorder_path, new_recorder_path)
-
-    assert os.path.exists(new_launcher_path) == True, "Rename failed"
-    assert os.path.exists(new_recorder_path) == True, "Rename failed"
-
-
-
+def rename_files(work_folder, old_filename, new_filename):
+    old_file_path = os.path.join(work_folder, old_filename)
+    new_file_path = os.path.join(work_folder, new_filename)
+    os.rename(old_file_path, new_file_path)
+    assert os.path.exists(new_file_path) == True, "Rename failed"
 
 # Unzip icons file within the workfolder with shutil
 def unzip_icons(work_folder,icon_file_name,icons_folder,archive_format):    

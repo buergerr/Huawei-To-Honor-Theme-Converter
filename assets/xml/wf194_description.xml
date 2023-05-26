@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<HnTheme>
+    <title></title>
+    <briefInfo></briefInfo>
+    <designer>Designer Name</designer>
+    <screen>HNHD02</screen>
+    <version>2.0.0</version>
+    <extra>{"category":"Illustrative", "zh": {"title": "", "briefInfo": ""}}</extra>
+    <font>Default</font>
+    <font-cn>默认</font-cn>
+    <expiredDate>-1</expiredDate>
+    <chargeFlag>1</chargeFlag>
+    <priceLevel>3</priceLevel>
+    <areaFlag>0</areaFlag>
+    <tag>Color</tag>
+</HnTheme>
