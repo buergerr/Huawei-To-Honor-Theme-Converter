@@ -10,7 +10,7 @@ def delete_and_copy_theme_xml(work_folder):
     os.remove(os.path.join(work_folder, "unlock/theme.xml"))
     assert os.path.exists(os.path.join(work_folder, "unlock/theme.xml")) == False, "Delete theme.xml failed"
 
-    shutil.copyfile("source_theme.xml", os.path.join(work_folder, "unlock/theme.xml"))
+    shutil.copyfile(os.path.join("assets/xml/source_theme.xml"), os.path.join(work_folder, "unlock/theme.xml"))
     assert os.path.exists(os.path.join(work_folder, "unlock/theme.xml")) == True, "Copy source_theme.xml failed"
 
 # The following function is used to unzip the files within the workfolder

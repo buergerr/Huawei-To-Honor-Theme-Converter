@@ -165,8 +165,7 @@ class App(QWidget):
             brief_info = root.find(".//briefinfo").text
             
             # Copy the source_description.xml file into the workfolder
-            shutil.copyfile("source_description.xml", os.path.join(self.work_folder, "source_description.xml"))
-
+            shutil.copyfile(os.path.join(self.assets_folder, "xml/source_description.xml"), os.path.join(self.work_folder, "source_description.xml"))
             result_text += f"Copied 'source_description.xml' into '{self.work_folder}'\n"
             assert os.path.exists(os.path.join(self.work_folder, "source_description.xml")) == True, "Source description file not copied"
             
