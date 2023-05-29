@@ -5,9 +5,10 @@ from PIL import Image
 from PyQt5.QtWidgets import QApplication, QWidget, QTextEdit, QVBoxLayout, QPushButton, QFileDialog,QLabel, QLineEdit
 from functions.uploadActions import unzip_hwt, rename_files, unzip_icons, rename_icons, zip_icons, delete_icons_file, remove_icons_zip_extension, delete_icons_workspace
 from functions.imageManipulation import resize_icon_small_preview
-from functions.xmlmanipluation import delete_folders, remove_zip_extension_from_zip_files, zip_folders, delete_original_files, rename_framework_folders, clean_empty_lines_in_xml_files, validate_xml_files, delete_and_copy_theme_xml, unzip_folder, replace_keys_in_xml_folders
+from functions.xmlmanipluation import remove_zip_extension_from_zip_files, zip_folders, delete_original_files, rename_framework_folders, clean_empty_lines_in_xml_files, validate_xml_files, delete_and_copy_theme_xml, unzip_folder, replace_keys_in_xml_folders
 from functions.helperFunctions import delete_work_folders
 from functions.saveActions import delete_description_xml, rename_description_xml, zip_workfolder
+from functions.Preview_Fix import generate_previews
 
 class App(QWidget):
     def __init__(self):
@@ -234,6 +235,10 @@ class App(QWidget):
             rename_framework_folders(self.folders)
             result_text += f"Renamed framework folders within the workfolder successfully to framework-res-hnext\n"
 
+            # run Preview_Fix.py
+            generate_previews()
+            result_text += f"Generated previews successfully\n"
+
             # Delete the original files within the workfolder #
             delete_original_files(self.work_folder, self.folders)  
 
@@ -249,11 +254,9 @@ class App(QWidget):
             # diplay the result text in the GUI
             self.text_edit.setText(result_text)
             assert self.text_edit.toPlainText() == result_text, "Result text not displayed"
+ 
 
-            # Delete folders
-            # delete_folders(self.files_to_delete)
-
-
+            
 
 
     def save(self):
