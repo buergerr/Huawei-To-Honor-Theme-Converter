@@ -55,8 +55,6 @@ def replace_hwtheme_with_hntheme(folders):
                         f.truncate()
                         assert os.path.exists(file_path) == True, "Replace HWTheme with HNTheme failed"
 
-                    
-
 
 # iterate through the xml files within the folders and replace the name of the resource with keys_mapping
 def replace_keys_in_xml_folders(folders, keys_mapping):

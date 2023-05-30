@@ -89,7 +89,7 @@ def generate_previews():
         jpeg_image.save(jpeg_path)
 
     resize_png("workfolder/icons_preview/com.hihonor.gamecenter.png", 182, 182)
-    resize_png("workfolder/icons_preview/com.hihonor.tipsove.png", 182, 182)
+    resize_png("workfolder/icons_preview/com.hihonor.tips.png", 182, 182)
     resize_png("workfolder/icons_preview/com.hihonor.android.remotecontroller.png", 182, 182)
     resize_png("workfolder/icons_preview/com.android.chrome.png", 182, 182)
     resize_png("workfolder/icons_preview/com.android.settings.png", 182, 182)
@@ -100,7 +100,7 @@ def generate_previews():
     widget_jpeg_path = "workfolder/preview/preview_widget_0.jpg"
     widget_png_paths = [
         "workfolder/icons_preview/com.hihonor.gamecenter.png",
-        "workfolder/icons_preview/com.hihonor.tipsove.png",
+        "workfolder/icons_preview/com.hihonor.tips.png",
         "workfolder/icons_preview/com.hihonor.android.remotecontroller.png",
         "workfolder/icons_preview/com.android.chrome.png"
     ]

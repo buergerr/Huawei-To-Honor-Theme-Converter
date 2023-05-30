@@ -3,12 +3,13 @@ import shutil
 import zipfile
 from PIL import Image
 from PyQt5.QtWidgets import QApplication, QWidget, QTextEdit, QVBoxLayout, QPushButton, QFileDialog,QLabel, QLineEdit
-from functions.uploadActions import unzip_hwt, rename_files, unzip_icons, rename_icons, zip_icons, delete_icons_file, remove_icons_zip_extension, delete_icons_workspace
+from functions.uploadActions import rename_framework_pngs, unzip_hwt, rename_files, unzip_icons, rename_icons, zip_icons, delete_icons_file, remove_icons_zip_extension, delete_icons_workspace
 from functions.imageManipulation import resize_icon_small_preview
 from functions.xmlmanipluation import remove_zip_extension_from_zip_files, zip_folders, delete_original_files, rename_framework_folders, clean_empty_lines_in_xml_files, validate_xml_files, delete_and_copy_theme_xml, unzip_folder, replace_keys_in_xml_folders
 from functions.helperFunctions import delete_work_folders
 from functions.saveActions import delete_description_xml, rename_description_xml, zip_workfolder
 from functions.Preview_Fix import generate_previews
+from functions.verify_icons import pause_if_icons_missing
 
 class App(QWidget):
     def __init__(self):
@@ -91,7 +92,7 @@ class App(QWidget):
             "hw": "hn"    
             }
 
-
+        
 
         
        # Clean up work folder at the start of each app launch
@@ -119,7 +120,6 @@ class App(QWidget):
             rename_files(self.work_folder, self.old_recorder_name, self.new_recorder_name)
             result_text += "Renamed recorder files successfully\n"
 
-
             # Resize icon_small.jpg within the preview folder
             resize_icon_small_preview(self.work_folder)
             result_text += f"Overwrote icon_small.jpg with resized image (510x345px)\n" 
@@ -131,6 +131,10 @@ class App(QWidget):
             # Rename icon files
             rename_icons(self.work_folder,self.icons_folder)
             result_text += f"Renamed icon files successfully\n"
+
+            # verify if icons are missing from the icons_workfolder
+            pause_if_icons_missing(self.icons_folder)
+
             
             # Zip icon files and all folders within the icon_folder into "icons" file
             zip_icons(self.work_folder,self.icon_file_name,self.icons_folder, self.archive_format)
@@ -140,7 +144,6 @@ class App(QWidget):
             delete_icons_file(self.work_folder,self.icon_file_name)
             result_text += f"Deleted '{self.icon_file_name}' file successfully\n"
             
-
             #remove .zip extension from the file
             remove_icons_zip_extension(self.work_folder,self.icon_file_name,self.archive_format)
             result_text += f"Removed .zip extension from the file successfully\n"
@@ -239,6 +242,10 @@ class App(QWidget):
             generate_previews()
             result_text += f"Generated previews successfully\n"
 
+            # rename files with "emui" to "magic" within the framework folders #
+            rename_framework_pngs(self.folders)
+            result_text += f"Renamed files within the workfolder successfully\n"
+
             # Delete the original files within the workfolder #
             delete_original_files(self.work_folder, self.folders)  
 
@@ -254,6 +261,8 @@ class App(QWidget):
             # diplay the result text in the GUI
             self.text_edit.setText(result_text)
             assert self.text_edit.toPlainText() == result_text, "Result text not displayed"
+
+
  
 
             

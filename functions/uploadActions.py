@@ -33,14 +33,15 @@ def zip_icons(work_folder,icon_file_name,icons_folder, archive_format):
 
 
 
-# Rename icon files
+# Rename icon files that starts with "com.huawei" or "com.hicloud" to "com.hihonor"
 def rename_icons(work_folder,icons_folder):
-    for filename in os.listdir(icons_folder):
-        if filename.startswith("com.huawei"):
-            old_filename = os.path.join(icons_folder, filename)
-            new_filename = os.path.join(icons_folder, filename.replace("com.huawei", "com.hihonor"))
-            os.rename(old_filename, new_filename)
-            assert os.path.exists(new_filename) == True, "Rename Icons huwei to hihonor failed"
+    for root, dirs, files in os.walk(icons_folder):
+        for file in files:
+            if file.startswith("com.huawei") or file.startswith("com.hicloud"):
+                old_file = os.path.join(root, file)
+                new_file = os.path.join(root, file.replace("com.huawei.music", "com.google.android.apps.youtube.music").replace("com.huawei", "com.hihonor").replace("com.hicloud", "com.hihonor").replace("com.hihonor.tipsove", "com.hihonor.tips"))
+                os.rename(old_file, new_file)
+                assert os.path.exists(new_file) == True, "Rename Icons huwei to hihonor failed"
 
 # rename folder within icons folder /dynamic_icons/com.huawei.android.totemweather to /dynamic_icons/com.hihonor.android.totemweather
     old_folder = os.path.join(icons_folder, "dynamic_icons/com.huawei.android.totemweather")
@@ -79,3 +80,19 @@ def delete_icons_workspace(icons_folder):
 def unzip_contacts(work_folder,icon_file_name,contacts_folder,archive_format):    
     shutil.unpack_archive(os.path.join(work_folder, icon_file_name), contacts_folder, archive_format)
     assert os.path.exists(contacts_folder) == True, "Unzip icons failed"
+
+# iterate through the png files in the folders and rename them from "emui" to "magic"
+def rename_framework_pngs(folders,):
+    for folder in folders:
+        folder_path = os.path.join(os.getcwd(), folder)
+        for root, _, files in os.walk(folder_path):
+            for file in files:
+                if file.endswith(".png"):
+                    old_file = os.path.join(root, file)
+                    new_file = os.path.join(root, file.replace("emui", "magic"))
+                    os.rename(old_file, new_file)
+                    assert os.path.exists(new_file) == True, "Rename Icons huwei to hihonor failed"
+
+
+
+  
