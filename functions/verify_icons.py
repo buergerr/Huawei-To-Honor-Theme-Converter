@@ -99,11 +99,6 @@ def check_icons_in_workfolder(icons_folder):
         pass    
     return missing_icons
 
-
-
-
-    
-
 # Pause the app until all missing icons are uploaded
 # Continue the app after all missing icons are uploaded
 # Continue the app if no icons are missing
