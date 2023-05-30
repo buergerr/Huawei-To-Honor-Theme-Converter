@@ -110,7 +110,19 @@ def pause_if_icons_missing(icons_folder):
     else:
         pass
 
-    
+
+# open icon_workfolder in file explorer and display a messagebox, after confirming the messagebox the app will continue
+def open_icons_workfolder(icons_folder):
+    os.startfile(icons_folder)
+    msg = QMessageBox()
+    msg.setIcon(QMessageBox.Information)
+    msg.setText("Please check for HUAWEI related texts in icons and replace them with HONOR.")
+    msg.setWindowTitle("Check for Huawei")
+    msg.setStandardButtons(QMessageBox.Ok)
+    # pause until the user clicks ok
+    while msg.exec_() == QMessageBox.Ok:
+        break
+
 
 
 

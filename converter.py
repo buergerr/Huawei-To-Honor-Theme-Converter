@@ -2,14 +2,14 @@ import os
 import shutil
 import zipfile
 from PIL import Image
-from PyQt5.QtWidgets import QApplication, QWidget, QTextEdit, QVBoxLayout, QPushButton, QFileDialog,QLabel, QLineEdit
+from PyQt5.QtWidgets import QApplication, QWidget, QTextEdit, QVBoxLayout, QPushButton, QFileDialog,QLabel, QLineEdit, QMessageBox
 from functions.uploadActions import rename_framework_pngs, unzip_hwt, rename_files, unzip_icons, rename_icons, zip_icons, delete_icons_file, remove_icons_zip_extension, delete_icons_workspace
 from functions.imageManipulation import resize_icon_small_preview
 from functions.xmlmanipluation import remove_zip_extension_from_zip_files, zip_folders, delete_original_files, rename_framework_folders, clean_empty_lines_in_xml_files, validate_xml_files, delete_and_copy_theme_xml, unzip_folder, replace_keys_in_xml_folders
-from functions.helperFunctions import delete_work_folders
+from functions.helperFunctions import delete_work_folders, display_messagebox
 from functions.saveActions import delete_description_xml, rename_description_xml, zip_workfolder
 from functions.Preview_Fix import generate_previews
-from functions.verify_icons import pause_if_icons_missing
+from functions.verify_icons import pause_if_icons_missing, open_icons_workfolder
 
 class App(QWidget):
     def __init__(self):
@@ -107,6 +107,14 @@ class App(QWidget):
     def upload_hwt(self):
         file_dialog = QFileDialog()
         file_path, _ = file_dialog.getOpenFileName(self, "Select .hwt file", "", "HWT Files (*.hwt)")
+        # cleanup if user clicks upload button again
+        for folder in self.folders:
+            delete_work_folders(folder)
+            assert os.path.exists(folder) == False, "Delete workfolder failed"
+        delete_work_folders(self.work_folder)
+        assert os.path.exists(self.work_folder) == False, "Delete workfolder failed"
+        self.text_edit.setText("")
+        
         if file_path:
 
             # Call the unzip_hwt function from uploadActions.py
@@ -131,6 +139,8 @@ class App(QWidget):
             # Rename icon files
             rename_icons(self.work_folder,self.icons_folder)
             result_text += f"Renamed icon files successfully\n"
+
+            open_icons_workfolder(self.icons_folder)
 
             # verify if icons are missing from the icons_workfolder
             pause_if_icons_missing(self.icons_folder)
@@ -241,7 +251,7 @@ class App(QWidget):
             # run Preview_Fix.py
             generate_previews()
             result_text += f"Generated previews successfully\n"
-
+      
             # rename files with "emui" to "magic" within the framework folders #
             rename_framework_pngs(self.folders)
             result_text += f"Renamed files within the workfolder successfully\n"
@@ -257,12 +267,20 @@ class App(QWidget):
             for folder in self.folders:
                 remove_zip_extension_from_zip_files(self.work_folder, folder, self.archive_format)
                 result_text += f"Removed .zip extension from the '{folder}' file successfully\n"
+
+            # open preview folder
+            os.startfile(os.path.join(self.work_folder, "preview"))
+            result_text += f"Opened preview folder successfully\n"
+
+            # display message box
+            display_messagebox()
+
             
             # diplay the result text in the GUI
             self.text_edit.setText(result_text)
             assert self.text_edit.toPlainText() == result_text, "Result text not displayed"
 
-
+            
  
 
             

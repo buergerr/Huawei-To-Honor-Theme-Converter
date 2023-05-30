@@ -39,25 +39,34 @@ def rename_icons(work_folder,icons_folder):
         for file in files:
             if file.startswith("com.huawei") or file.startswith("com.hicloud"):
                 old_file = os.path.join(root, file)
-                new_file = os.path.join(root, file.replace("com.huawei.music", "com.google.android.apps.youtube.music").replace("com.huawei", "com.hihonor").replace("com.hicloud", "com.hihonor").replace("com.hihonor.tipsove", "com.hihonor.tips"))
+                new_file = os.path.join(root, file. replace("com.huawei.vmall", "com.hihonor.hstore.global").replace("com.huawei.music", "com.google.android.apps.youtube.music").replace("com.huawei", "com.hihonor").replace("com.hicloud", "com.hihonor").replace("com.hihonor.tipsove", "com.hihonor.tips"))
                 os.rename(old_file, new_file)
                 assert os.path.exists(new_file) == True, "Rename Icons huwei to hihonor failed"
 
-# rename folder within icons folder /dynamic_icons/com.huawei.android.totemweather to /dynamic_icons/com.hihonor.android.totemweather
+# rename folder within icons folder /dynamic_icons/com.huawei.android.totemweather to /dynamic_icons/com.hihonor.android.totemweather or continue if folder does not exist
     old_folder = os.path.join(icons_folder, "dynamic_icons/com.huawei.android.totemweather")
     new_folder = os.path.join(icons_folder, "dynamic_icons/com.hihonor.android.totemweather")
-    os.rename(old_folder, new_folder)
-    assert os.path.exists(new_folder) == True, "Rename 'totemweather'failed"
+    if os.path.exists(old_folder):
+        os.rename(old_folder, new_folder)
+        assert os.path.exists(new_folder) == True, "Rename 'totemweather'failed"
+    else:
+        pass
 
-# rename folder within icons folder com.android.deskclock OR com.huawei.deskclock to /dynamic_icons/com.hihonor.deskclock
+
+# rename folder within icons folder com.android.deskclock OR com.huawei.deskclock to /dynamic_icons/com.hihonor.deskclock or continue if folder does not exist
     old_folder = os.path.join(icons_folder, "dynamic_icons/com.android.deskclock")
     new_folder = os.path.join(icons_folder, "dynamic_icons/com.hihonor.deskclock")
     if os.path.exists(old_folder):
         os.rename(old_folder, new_folder)        
-    else:
+    elif os.path.exists(os.path.join(icons_folder, "dynamic_icons/com.huawei.deskclock")):
         old_folder = os.path.join(icons_folder, "dynamic_icons/com.huawei.deskclock")
-        os.rename(old_folder, new_folder)            
-        assert os.path.exists(new_folder) == True, "Rename 'deskclock' failed"
+        new_folder = os.path.join(icons_folder, "dynamic_icons/com.hihonor.deskclock")
+        os.rename(old_folder, new_folder)
+        assert os.path.exists(new_folder) == True, "Rename 'deskclock'failed"
+    else:
+        pass
+        
+  
 
 
 
