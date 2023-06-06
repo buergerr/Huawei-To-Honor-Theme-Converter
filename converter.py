@@ -10,6 +10,7 @@ from functions.helperFunctions import delete_work_folders, display_messagebox
 from functions.saveActions import delete_description_xml, rename_description_xml, zip_workfolder
 from functions.Preview_Fix import generate_previews
 from functions.verify_icons import pause_if_icons_missing, open_icons_workfolder
+from functions.lockscreen_fix import replace_string_in_manifest
 
 class App(QWidget):
     def __init__(self):
@@ -69,6 +70,8 @@ class App(QWidget):
         self.launcher_folder = "com.hihonor.android.launcher"
         self.assets_folder = "assets/"
         self.xmlNameConversionFile = "xmlNameConversions.csv"
+        self.old_date_string = "MMMMM dd EEEE"
+        self.new_date_string = "EEEE, MMMM dd"
         self.folders = [
             "com.android.contacts", 
             "com.android.incallui", 
@@ -161,6 +164,9 @@ class App(QWidget):
             # Delete icon workspace
             delete_icons_workspace(self.icons_folder)
             result_text += f"Deleted icon workspace successfully\n"
+
+            replace_string_in_manifest(self.work_folder)
+            result_text += f"Replaced string in manifest successfully\n"
             
             ############################# Description.xml management and GUI ##########################################
             # Read the description.xml file
