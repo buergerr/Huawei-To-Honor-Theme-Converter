@@ -41,9 +41,9 @@ def generate_previews():
     icon_preview_paste_coordinates1 = (308, 1176)
 
     icon_preview_destination_image.paste(icon_preview_cropped_image1, icon_preview_paste_coordinates1)
-    icon_preview_crop_coordinates2 = (1365, 1692, 1365 + 209, 1692 + 64)
+    icon_preview_crop_coordinates2 = (1365-500, 1692, 1365 + 209, 1692 + 64)
     icon_preview_cropped_image2 = icon_preview_source_image.crop(icon_preview_crop_coordinates2)
-    icon_preview_paste_coordinates2 = (825, 1692)
+    icon_preview_paste_coordinates2 = (825-500, 1692)
     icon_preview_destination_image.paste(icon_preview_cropped_image2, icon_preview_paste_coordinates2)
 
     tree = ET.parse(xml_file)
@@ -57,6 +57,8 @@ def generate_previews():
     add_text_widget(icon_preview_destination_image, "Game Center", 34, (327, 1389), text_color)
     add_text_widget(icon_preview_destination_image, "Tips", 34, (630, 1389), text_color)
     add_text_widget(icon_preview_destination_image, "Smart Remote", 34, (811, 1700), text_color)
+    add_text_widget(icon_preview_destination_image, "Notepad", 34, (600, 1700), text_color)
+    add_text_widget(icon_preview_destination_image, "System Manager", 34, (290, 1700), text_color)
 
     icon_preview_destination_image.save("workfolder\preview\preview_widget_0.jpg")
 
@@ -78,7 +80,7 @@ def generate_previews():
 
 
     icon_preview_source_image = Image.open("workfolder\wallpaper\home_wallpaper_0.jpg")
-    icon_preview_crop_coordinates1 = (540, 88, 540 + 540, 88 + 629)
+    icon_preview_crop_coordinates1 = (540, 88, 540 + 540 + 250, 88 + 629)
     icon_preview_cropped_image1 = icon_preview_source_image.crop(icon_preview_crop_coordinates1)
 
     icon_preview_destination_image = Image.open("workfolder\preview\preview_icons_0.jpg")
@@ -96,7 +98,9 @@ def generate_previews():
     add_text_icons(icon_preview_destination_image, "Settings", 34, (112, 334), text_color)
     add_text_icons(icon_preview_destination_image, "Calculator", 34, (336, 334), text_color)
     add_text_icons(icon_preview_destination_image, "Recorder", 34, (105, 643), text_color)     
-    add_text_icons(icon_preview_destination_image, "Honor Store", 34, (334, 643), text_color)
+    add_text_icons(icon_preview_destination_image, "HONOR Store", 34, (324, 643), text_color)
+    add_text_icons(icon_preview_destination_image, "GameCenter", 34, (574, 334), text_color)
+    add_text_icons(icon_preview_destination_image, "Device Clone", 34, (574, 643), text_color)
 
     icon_preview_destination_image.save("workfolder\preview\preview_icons_0.jpg")
 
@@ -125,16 +129,18 @@ def generate_previews():
     resize_png("workfolder\icons_preview\com.android.settings.png", 182, 182)
     resize_png("workfolder\icons_preview\com.hihonor.calculator.png", 182, 182)
     resize_png("workfolder\icons_preview\com.hihonor.soundrecorder.png", 182, 182)
-    resize_png("workfolder\icons_preview\com.hihonor.appmarket.png", 182, 182)
+    resize_png("workfolder\icons_preview\com.hihonor.hstore.global.png", 182, 182)
+    resize_png("workfolder\icons_preview\com.google.android.apps.messaging.png", 182, 182)
+    resize_png("workfolder\icons_preview\com.hihonor.android.clone.png", 182, 182)
 
     widget_jpeg_path = "workfolder\preview\preview_widget_0.jpg"
-    widget_png_paths = ["workfolder\icons_preview\com.hihonor.gamecenter.png", "workfolder\icons_preview\com.hihonor.tips.png", "workfolder\icons_preview\com.hihonor.android.remotecontroller.png", "workfolder\icons_preview\com.android.chrome.png"]
-    widget_positions = [(322, 1190), (570, 1190), (817, 1500), (574, 1870)]
+    widget_png_paths = ["workfolder\icons_preview\com.hihonor.gamecenter.png", "workfolder\icons_preview\com.hihonor.tips.png", "workfolder\icons_preview\com.hihonor.android.remotecontroller.png", "workfolder\icons_preview\com.android.chrome.png", "workfolder\icons_preview\com.google.android.apps.messaging.png"]
+    widget_positions = [(322, 1190), (570, 1190), (817, 1500), (574, 1870), (322, 1870)]
     insert_png_into_jpeg(widget_jpeg_path, widget_png_paths, widget_positions)
 
     systemui_jpeg_path = "workfolder\preview\preview_icons_0.jpg"
-    systemui_png_paths = ["workfolder\icons_preview\com.android.settings.png", "workfolder\icons_preview\com.hihonor.calculator.png", "workfolder\icons_preview\com.hihonor.soundrecorder.png", "workfolder\icons_preview\com.hihonor.appmarket.png"]
-    systemui_positions = [(79, 136), (325, 136), (79, 446), (325, 446)]
+    systemui_png_paths = ["workfolder\icons_preview\com.android.settings.png", "workfolder\icons_preview\com.hihonor.calculator.png", "workfolder\icons_preview\com.hihonor.soundrecorder.png", "workfolder\icons_preview\com.hihonor.hstore.global.png", "workfolder\icons_preview\com.android.chrome.png", "workfolder\icons_preview\com.google.android.apps.messaging.png","workfolder\icons_preview\com.hihonor.gamecenter.png","workfolder\icons_preview\com.hihonor.android.clone.png"]
+    systemui_positions = [(79, 136), (325, 136), (79, 446), (325, 446),(574, 1870), (322, 1870), (574, 136), (574, 446)]
     insert_png_into_jpeg(systemui_jpeg_path, systemui_png_paths, systemui_positions)
 
 
@@ -168,7 +174,7 @@ def generate_previews():
 
     text_color = tuple(int(color_value_system_text[i:i+2], 16) for i in (0, 2, 4))
 
-    add_text_system(system_preview_destination_image, "Honor Share", 38, (319, 839), text_color)
+    add_text_system(system_preview_destination_image, "HONOR Share", 38, (319, 839), text_color)
 
     system_preview_destination_image.save("workfolder\preview\preview_systemui_0.jpg")
 

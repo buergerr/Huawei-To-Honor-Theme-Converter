@@ -10,7 +10,7 @@ from functions.helperFunctions import delete_work_folders, display_messagebox
 from functions.saveActions import delete_description_xml, rename_description_xml, zip_workfolder
 from functions.Preview_Fix import generate_previews
 from functions.verify_icons import pause_if_icons_missing, open_icons_workfolder
-from functions.lockscreen_fix import replace_string_in_manifest
+from functions.lockscreen_fix import update_datetime_format_in_manifest
 
 class App(QWidget):
     def __init__(self):
@@ -165,7 +165,7 @@ class App(QWidget):
             delete_icons_workspace(self.icons_folder)
             result_text += f"Deleted icon workspace successfully\n"
 
-            replace_string_in_manifest(self.work_folder)
+            update_datetime_format_in_manifest(self.work_folder)
             result_text += f"Replaced string in manifest successfully\n"
             
             ############################# Description.xml management and GUI ##########################################
