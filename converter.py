@@ -143,7 +143,8 @@ class App(QWidget):
             # Rename icon files
             rename_icons(self.work_folder,self.icons_folder)
             result_text += f"Renamed icon files successfully\n"
-                   
+
+            self.text_edit.setText(result_text)      
 
             open_icons_workfolder(self.icons_folder)       
 
@@ -264,6 +265,8 @@ class App(QWidget):
             rename_framework_folders(self.folders)
             result_text += f"Renamed framework folders within the workfolder successfully to framework-res-hnext\n"
 
+            self.text_edit.setText(result_text)
+
             # run Preview_Fix.py
             generate_previews()
             result_text += f"Generated previews successfully\n"
@@ -285,8 +288,13 @@ class App(QWidget):
                 result_text += f"Removed .zip extension from the '{folder}' file successfully\n"
 
             # open preview folder
-            os.startfile(os.path.join(self.work_folder, "preview"))
-            result_text += f"Opened preview folder successfully\n"
+            #os.startfile(os.path.join(self.work_folder, "preview"))
+            #result_text += f"Opened preview folder successfully\n"
+
+            # open the preview_widget_0.jpg file
+            os.startfile(os.path.join(self.work_folder, "preview", "preview_icons_0.jpg"))
+
+            self.text_edit.setText(result_text)
 
             # display message box
             display_messagebox()
