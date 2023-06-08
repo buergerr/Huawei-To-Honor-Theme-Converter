@@ -1,16 +1,17 @@
 import os
 import shutil
+import time
 import zipfile
 from PIL import Image
 from PyQt5.QtWidgets import QApplication, QWidget, QTextEdit, QVBoxLayout, QPushButton, QFileDialog,QLabel, QLineEdit, QMessageBox
-from functions.uploadActions import rename_framework_pngs, unzip_hwt, rename_files, unzip_icons, rename_icons, zip_icons, delete_icons_file, remove_icons_zip_extension, delete_icons_workspace
+from functions.uploadActions import copy_appmarket, rename_framework_pngs, unzip_hwt, rename_files, unzip_icons, rename_icons, zip_icons, delete_icons_file, remove_icons_zip_extension, delete_icons_workspace
 from functions.imageManipulation import resize_icon_small_preview
 from functions.xmlmanipluation import remove_zip_extension_from_zip_files, zip_folders, delete_original_files, rename_framework_folders, clean_empty_lines_in_xml_files, validate_xml_files, delete_and_copy_theme_xml, unzip_folder, replace_keys_in_xml_folders
 from functions.helperFunctions import delete_work_folders, display_messagebox
 from functions.saveActions import delete_description_xml, rename_description_xml, zip_workfolder
 from functions.Preview_Fix import generate_previews
 from functions.verify_icons import pause_if_icons_missing, open_icons_workfolder
-from functions.lockscreen_fix import update_datetime_format_in_manifest
+from functions.lockscreen_fix import update_datetime_format_in_manifest, add_datetime_format_in_manifest
 
 class App(QWidget):
     def __init__(self):
@@ -142,11 +143,15 @@ class App(QWidget):
             # Rename icon files
             rename_icons(self.work_folder,self.icons_folder)
             result_text += f"Renamed icon files successfully\n"
+                   
 
-            open_icons_workfolder(self.icons_folder)
+            open_icons_workfolder(self.icons_folder)       
 
             # verify if icons are missing from the icons_workfolder
             pause_if_icons_missing(self.icons_folder)
+
+            copy_appmarket(self.icons_folder)
+            result_text += f"Copied icons from vmall to hstore successfully\n" 
 
             
             # Zip icon files and all folders within the icon_folder into "icons" file
@@ -166,7 +171,12 @@ class App(QWidget):
             result_text += f"Deleted icon workspace successfully\n"
 
             update_datetime_format_in_manifest(self.work_folder)
-            result_text += f"Replaced string in manifest successfully\n"
+            result_text += f"Replaced datetime in manifest successfully\n"
+
+            # if datetime not exists in manifest, add it
+            add_datetime_format_in_manifest(self.work_folder)
+            result_text += f"Added datetime in manifest successfully\n"
+
             
             ############################# Description.xml management and GUI ##########################################
             # Read the description.xml file

@@ -31,17 +31,28 @@ def zip_icons(work_folder,icon_file_name,icons_folder, archive_format):
     shutil.make_archive(os.path.join(work_folder, icon_file_name), archive_format, icons_folder)    
     assert os.path.exists(os.path.join(work_folder, icon_file_name + "." + archive_format)) == True, "Zip icons failed"
 
-
-
 # Rename icon files that starts with "com.huawei" or "com.hicloud" to "com.hihonor"
 def rename_icons(work_folder,icons_folder):
     for root, dirs, files in os.walk(icons_folder):
         for file in files:
             if file.startswith("com.huawei") or file.startswith("com.hicloud"):
                 old_file = os.path.join(root, file)
-                new_file = os.path.join(root, file. replace("com.huawei.vmall", "com.hihonor.hstore.global").replace("com.huawei.music", "com.google.android.apps.youtube.music").replace("com.huawei", "com.hihonor").replace("com.hicloud", "com.hihonor").replace("com.hihonor.tipsove", "com.hihonor.tips"))
+                new_file = os.path.join(root, file.replace("com.huawei.music", "com.google.android.apps.youtube.music").replace("com.huawei", "com.hihonor").replace("com.hicloud", "com.hihonor").replace("com.hihonor.tipsove", "com.hihonor.tips"))
                 os.rename(old_file, new_file)
                 assert os.path.exists(new_file) == True, "Rename Icons huwei to hihonor failed"
+
+
+# copy com.hihonor.appmarket.png from icons_folder into icons_folder and rename it to com.hihonor.hstore.global.png
+def copy_appmarket(icons_folder):
+    shutil.copy(os.path.join(icons_folder, "com.vmall.client.png"), os.path.join(icons_folder, "com.hihonor.hstore.global.png"))
+    assert os.path.exists(os.path.join(icons_folder, "com.hihonor.hstore.global.png")) == True, "Copy Hstore Icons failed"
+    # delete com.hihonor.appmarket.png from icons_folder
+    os.remove(os.path.join(icons_folder, "com.hihonor.appmarket.png"))
+    shutil.copy(os.path.join(icons_folder, "com.vmall.client.png"), os.path.join(icons_folder, "com.hihonor.appmarket.png"))
+    assert os.path.exists(os.path.join(icons_folder, "com.hihonor.appmarket.png")) == True, "Copy AppMarket Icons failed"
+
+
+
 
 # rename folder within icons folder /dynamic_icons/com.huawei.android.totemweather to /dynamic_icons/com.hihonor.android.totemweather or continue if folder does not exist
     old_folder = os.path.join(icons_folder, "dynamic_icons/com.huawei.android.totemweather")

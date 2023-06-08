@@ -13,7 +13,7 @@ app_packages = [
             "com.hihonor.contacts",
             "com.hihonor.soundrecorder",
             "com.hihonor.calendar",
-            "com.hihonor.hstore.global",
+            #"com.hihonor.hstore.global",
             "com.hihonor.deskclock",
             "com.hihonor.android.totemweather",
             "com.hihonor.photos",
@@ -22,7 +22,7 @@ app_packages = [
             "com.hihonor.phoneservice",
             "com.hihonor.camera",
             "com.hihonor.android.thememanager",
-            "com.hihonor.appmarket",
+            #"com.hihonor.appmarket",
             "com.hihonor.gamecenter",
             "com.hihonor.compass",
             "com.android.settings",
@@ -116,15 +116,9 @@ def open_icons_workfolder(icons_folder):
     os.startfile(icons_folder)
     msg = QMessageBox()
     msg.setIcon(QMessageBox.Information)
-    msg.setText("Please check for HUAWEI related texts in icons and replace them with HONOR.")
+    msg.setText("Please check for HUAWEI related texts in icons (com.vmall.client) and replace them with HONOR.\n And add Google Icons")
     msg.setWindowTitle("Check for Huawei")
     msg.setStandardButtons(QMessageBox.Ok)
     # pause until the user clicks ok
     while msg.exec_() == QMessageBox.Ok:
         break
-
-
-
-
-
-
