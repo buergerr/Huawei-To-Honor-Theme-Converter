@@ -38,7 +38,8 @@ app_packages = [
             "com.google.android.apps.tachyon",
             "com.google.android.apps.photos",
             "com.android.vending",
-            "com.google.android.videos"
+            "com.google.android.videos",
+            "com.android.calendar"
         ]
 
 def upload_icons(icons_folder):

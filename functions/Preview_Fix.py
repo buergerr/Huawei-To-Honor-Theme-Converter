@@ -158,7 +158,7 @@ def generate_previews():
     add_text_icons(icon_preview_destination_image, "Recorder", 34,      (105, 643), text_color)     
     add_text_icons(icon_preview_destination_image, "HONOR Store", 34,   (324, 643), text_color)
     add_text_icons(icon_preview_destination_image, "Device Clone", 34,  (574, 643), text_color)
-    add_text_icons(icon_preview_destination_image, "Cloud", 34,         (865, 643), text_color)
+    add_text_icons(icon_preview_destination_image, "Calendar", 34,      (845, 643), text_color)
     # third row of icons from left to right
     add_text_icons(icon_preview_destination_image, "FM Radio", 34,      (100, 952), text_color)
     add_text_icons(icon_preview_destination_image, "Contacts", 34,      (340, 952), text_color)
@@ -212,7 +212,7 @@ def generate_previews():
     "com.hihonor.email.png",
     "com.hihonor.gamebox.png",
     "com.hihonor.health.png",
-    "com.hihonor.hidisk.png",
+    "com.hihonor.calendar",
     "com.hihonor.hstore.global.png",
     "com.hihonor.hwireader.png",
     "com.hihonor.notepad.png",
@@ -294,7 +294,7 @@ def generate_previews():
         "workfolder\icons_preview\com.hihonor.soundrecorder.png", 
         "workfolder\icons_preview\com.hihonor.hstore.global.png",
         "workfolder\icons_preview\com.hihonor.android.clone.png",
-        "workfolder\icons_preview\com.hihonor.hidisk.png",
+        "workfolder\icons_preview\com.android.calendar.png",
         # third row
         "workfolder\icons_preview\com.hihonor.android.FMRadio.png",
         "workfolder\icons_preview\com.hihonor.contacts.png",
