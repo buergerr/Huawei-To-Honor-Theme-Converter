@@ -291,12 +291,17 @@ class App(QWidget):
             #os.startfile(os.path.join(self.work_folder, "preview"))
             #result_text += f"Opened preview folder successfully\n"
 
+            
+
+            #self.text_edit.setText(result_text)
+
+           
+
             # open the preview_widget_0.jpg file
             os.startfile(os.path.join(self.work_folder, "preview", "preview_icons_0.jpg"))
+            os.startfile(os.path.join(self.work_folder, "preview", "preview_widget_0.jpg"))
 
-            self.text_edit.setText(result_text)
-
-            # display message box
+             # display message box
             display_messagebox()
 
             
