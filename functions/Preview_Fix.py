@@ -69,7 +69,7 @@ def generate_previews():
     root = tree.getroot()
 
     color_name_widget_text = root.find("color[@name='workspace_app_text_color']").text
-    color_value_widget_text = color_name_widget_text[2:]  # Ignoriere die ersten beiden Zeichen "#"
+    color_value_widget_text = color_name_widget_text[3:]  # Ignoriere die ersten beiden Zeichen "#"
 
     text_color = tuple(int(color_value_widget_text[i:i+2], 16) for i in (0, 2, 4))
 
@@ -145,7 +145,7 @@ def generate_previews():
     root = tree.getroot()
 
     color_name_widget_text = root.find("color[@name='workspace_app_text_color']").text
-    color_value_widget_text = color_name_widget_text[2:]  # Ignoriere die ersten beiden Zeichen "#"
+    color_value_widget_text = color_name_widget_text[3:]  # Ignoriere die ersten beiden Zeichen "#"
 
     text_color = tuple(int(color_value_widget_text[i:i+2], 16) for i in (0, 2, 4))
 

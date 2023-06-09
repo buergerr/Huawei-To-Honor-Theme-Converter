@@ -41,6 +41,15 @@ def rename_icons(work_folder,icons_folder):
                 os.rename(old_file, new_file)
                 assert os.path.exists(new_file) == True, "Rename Icons huwei to hihonor failed"
 
+# delete workfolder/preview/preview_mms_0.jpg if it exists
+def delete_preview_mms(work_folder):
+    if os.path.exists(os.path.join(work_folder, "preview/preview_mms_0.jpg")):
+        os.remove(os.path.join(work_folder, "preview/preview_mms_0.jpg"))
+        assert os.path.exists(os.path.join(work_folder, "preview/preview_mms_0.jpg")) == False, "Delete preview_mms_0.jpg failed"
+    else:
+        pass
+
+    
 
 # copy com.hihonor.appmarket.png from icons_folder into icons_folder and rename it to com.hihonor.hstore.global.png
 def copy_appmarket(icons_folder):

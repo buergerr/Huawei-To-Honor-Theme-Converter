@@ -4,7 +4,7 @@ import time
 import zipfile
 from PIL import Image
 from PyQt5.QtWidgets import QApplication, QWidget, QTextEdit, QVBoxLayout, QPushButton, QFileDialog,QLabel, QLineEdit, QMessageBox
-from functions.uploadActions import copy_appmarket, rename_framework_pngs, unzip_hwt, rename_files, unzip_icons, rename_icons, zip_icons, delete_icons_file, remove_icons_zip_extension, delete_icons_workspace
+from functions.uploadActions import delete_preview_mms, copy_appmarket, rename_framework_pngs, unzip_hwt, rename_files, unzip_icons, rename_icons, zip_icons, delete_icons_file, remove_icons_zip_extension, delete_icons_workspace
 from functions.imageManipulation import resize_icon_small_preview
 from functions.xmlmanipluation import remove_zip_extension_from_zip_files, zip_folders, delete_original_files, rename_framework_folders, clean_empty_lines_in_xml_files, validate_xml_files, delete_and_copy_theme_xml, unzip_folder, replace_keys_in_xml_folders
 from functions.helperFunctions import delete_work_folders, display_messagebox
@@ -124,6 +124,9 @@ class App(QWidget):
             # Call the unzip_hwt function from uploadActions.py
             unzip_hwt(file_path, self.work_folder)
             result_text = "Unzipped .hwt file successfully\n"
+
+            # delete mms preview if exists
+            delete_preview_mms(self.work_folder)
             
             # Call the rename_files function from uploadActions.py
             rename_files(self.work_folder, self.old_launcher_name, self.new_launcher_name)

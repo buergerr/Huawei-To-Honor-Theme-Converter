@@ -97,16 +97,27 @@ def clean_empty_lines_in_xml_files(folders):
                         assert os.path.exists(file_path) == True, "Clean empty lines in xml files failed"
 
 # rename folders within the folders. If folder name is "framework-res-hwext", rename it to "framework-res-hnext"
+# catch error if renaming failed
 def rename_framework_folders(folders):
     for folder in folders:
         folder_path = os.path.join(os.getcwd(), folder)
         for root, dirs, _ in os.walk(folder_path):
-            for dir in dirs:
-                if dir == "framework-res-hwext":
-                    old_folder = os.path.join(root, dir)
+            for dir_name in dirs:
+                if dir_name == "framework-res-hwext":
+                    old_folder = os.path.join(root, dir_name)
                     new_folder = os.path.join(root, "framework-res-hnext")
-                    os.rename(old_folder, new_folder)
-                    assert os.path.exists(new_folder) == True, "Rename 'framework-res-hwext' failed"
+                    
+                    try:
+                        shutil.move(old_folder, new_folder)
+                    except PermissionError:
+                        print(f"Permission error occurred while renaming '{old_folder}'. Skipping.")
+                    except FileNotFoundError:
+                        print(f"Folder '{old_folder}' not found. Skipping.")
+                    except Exception as e:
+                        print(f"An error occurred while renaming '{old_folder}': {e}")
+                    
+                    assert os.path.exists(new_folder), "Rename 'framework-res-hwext' failed"
+                    
 
 # zip the folders abd move the zip file to the workfolder
 def zip_folders(folders, archive_format):
