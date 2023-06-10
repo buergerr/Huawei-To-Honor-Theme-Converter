@@ -7,7 +7,7 @@ from functions.uploadActions import unzip_hwt, rename_files, unzip_icons, rename
 from functions.imageManipulation import resize_aod_cover
 from functions.xmlmanipluation import replace_hwtheme_with_hntheme, delete_folders, remove_zip_extension_from_zip_files, zip_folders, delete_original_files, rename_framework_folders, clean_empty_lines_in_xml_files, validate_xml_files, delete_and_copy_theme_xml, unzip_folder, replace_keys_in_xml_folders
 from functions.helperFunctions import delete_work_folders
-from functions.saveActions import delete_description_xml, rename_description_xml, zip_workfolder
+from functions.saveActions import delete_description_xml, rename_description_xml, zip_workfolder_AOD
 
 class App(QWidget):
     def __init__(self):
@@ -209,7 +209,7 @@ class App(QWidget):
         rename_description_xml(self.work_folder, self.source_description_file_path)
         
         # Zip the workfolder into a .hwt file
-        zip_workfolder(self.work_folder, self.title_edit, self.designer_edit, self.version_edit, self.text_edit)
+        zip_workfolder_AOD(self.work_folder, self.title_edit, self.designer_edit, self.version_edit, self.text_edit)
                 
         # Clean up work folder at the start of each app launch
         for folder in self.folders:

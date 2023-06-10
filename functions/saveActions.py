@@ -69,3 +69,21 @@ def zip_workfolder194(work_folder, title_edit, designer_edit, version_edit, text
 
         text_edit.append(f"Zipped workfolder into '{hnt_filename}'")
         assert os.path.exists(hnt_filepath) == True
+
+
+                # Zip the workfolder into a .hwt file
+def zip_workfolder_AOD(work_folder, title_edit, designer_edit, version_edit, text_edit):
+        title = title_edit.text()
+        designer = designer_edit.text()
+        version = version_edit.text()
+        hnt_filename = f"{title}_{designer}_{version}_AOD.hnt"
+        hnt_filepath = os.path.join(os.path.dirname(work_folder), hnt_filename)
+
+        with zipfile.ZipFile(hnt_filepath, "w", zipfile.ZIP_DEFLATED) as zip_ref:
+            for root, _, files in os.walk(work_folder):
+                for file in files:
+                    file_path = os.path.join(root, file)
+                    zip_ref.write(file_path, os.path.relpath(file_path, work_folder))
+
+        text_edit.append(f"Zipped workfolder into '{hnt_filename}'")
+        assert os.path.exists(hnt_filepath) == True
