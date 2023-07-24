@@ -20,8 +20,10 @@ Make sure you have the following software installed on your system:
 
 ## Usage
 Launch the application by running the following command:
- ```bash
- python converter.py
+   ```bash
+   python converter.py
+   ```
+
 The application window will open, showing various input fields and buttons.
 
 ## Buttons and Functions
